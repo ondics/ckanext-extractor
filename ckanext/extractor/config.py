@@ -22,16 +22,19 @@ from __future__ import absolute_import, print_function, unicode_literals
 from fnmatch import fnmatch
 import logging.config
 import os.path
-from string import lower
 
-import paste.deploy
-from paste.registry import Registry
-from pylons import config, translator
+# import paste.deploy
+# from paste.registry import Registry
+# from pylons import config, translator
+
+from ckan.common import config
+import ckan.cli as ckan_cli
 
 from ckan.plugins import toolkit
-from ckan.config.environment import load_environment
-from ckan.lib.cli import MockTranslator
+# from ckan.config.environment import load_environment
+# from ckan.lib.cli import MockTranslator
 
+load_config = ckan_cli.load_config
 
 DEFAULTS = {
     'ckanext.extractor.indexed_formats': 'pdf',
@@ -39,8 +42,8 @@ DEFAULTS = {
 }
 
 TRANSFORMATIONS = {
-    'ckanext.extractor.indexed_formats': [lower, toolkit.aslist],
-    'ckanext.extractor.indexed_fields': [lower, toolkit.aslist],
+    'ckanext.extractor.indexed_formats': [str.lower, toolkit.aslist],
+    'ckanext.extractor.indexed_fields': [str.lower, toolkit.aslist],
 }
 
 
@@ -61,18 +64,18 @@ def get(setting):
 
 
 # Adapted from ckanext-archiver
-def load_config(ini_path):
-    """
-    Load CKAN configuration.
-    """
-    ini_path = os.path.abspath(ini_path)
-    logging.config.fileConfig(ini_path, disable_existing_loggers=False)
-    conf = paste.deploy.appconfig('config:' + ini_path)
-    load_environment(conf.global_conf, conf.local_conf)
-    _register_translator()
+# def load_config(ini_path):
+#     """
+#     Load CKAN configuration.
+#     """
+#     ini_path = os.path.abspath(ini_path)
+#     logging.config.fileConfig(ini_path, disable_existing_loggers=False)
+#     conf = paste.deploy.appconfig('config:' + ini_path)
+#     load_environment(conf.global_conf, conf.local_conf)
+#     _register_translator()
 
 
-# Adapted from ckanext-archiver
+# # Adapted from ckanext-archiver
 def _register_translator():
     """
     Register a translator in this thread.

@@ -56,7 +56,7 @@ class _Schema(object):
 
 
 class _MandatoryID(_Schema):
-    id = [not_empty, unicode]
+    id = [not_empty, str]
 
 extractor_delete = _MandatoryID
 

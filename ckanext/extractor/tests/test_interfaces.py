@@ -50,7 +50,7 @@ METADATA =  {
 
 def filter_metadata(d):
     keys = config['ckanext.extractor.indexed_fields'].split()
-    return dict((key, value) for key, value in d.iteritems() if key in keys)
+    return dict((key, value) for key, value in d.items() if key in keys)
 
 
 class MockPostprocessor(SingletonPlugin):
@@ -65,7 +65,7 @@ class MockAfterExtractPostprocessor(MockPostprocessor):
 
     def extractor_after_extract(self, res_dict, extracted):
         self.called += 1
-        for key, value in RES_DICT.iteritems():
+        for key, value in RES_DICT.items():
             assert_equal(value, res_dict[key])
         assert_equal(extracted, METADATA)
         extracted['fulltext'] = 'i can change this'
@@ -76,7 +76,7 @@ class MockAfterSavePostprocessor(MockPostprocessor):
 
     def extractor_after_save(self, res_dict, metadata_dict):
         self.called += 1
-        for key, value in RES_DICT.iteritems():
+        for key, value in RES_DICT.items():
             assert_equal(value, res_dict[key])
         assert_equal(metadata_dict['meta'], filter_metadata(METADATA))
         assert_package_not_found(METADATA['fulltext'], res_dict['package_id'])
@@ -87,7 +87,7 @@ class MockAfterIndexPostprocessor(MockPostprocessor):
 
     def extractor_after_index(self, res_dict, metadata_dict):
         self.called += 1
-        for key, value in RES_DICT.iteritems():
+        for key, value in RES_DICT.items():
             assert_equal(value, res_dict[key])
         assert_equal(metadata_dict['meta'], filter_metadata(METADATA))
         assert_package_found(METADATA['fulltext'], res_dict['package_id'])

@@ -27,9 +27,10 @@ from ckan import plugins
 from ckan.logic import NotFound
 from ckan.plugins import toolkit
 
-from .config import is_field_indexed, is_format_indexed
-from .logic import action, auth
-from . import model
+from ckanext.extractor.config import is_field_indexed, is_format_indexed
+from ckanext.extractor.logic import action, auth
+from ckanext.extractor import model
+from ckanext.extractor.cli import get_commands
 
 
 log = logging.getLogger(__name__)
@@ -57,6 +58,7 @@ class ExtractorPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IActions)
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IConfigurable)
+    plugins.implements(plugins.IClick)
 
     #
     # IConfigurer
@@ -135,7 +137,7 @@ class ExtractorPlugin(plugins.SingletonPlugin):
                 metadata = get_action('extractor_show')({}, resource)
             except NotFound:
                 continue
-            for key, value in metadata['meta'].iteritems():
+            for key, value in metadata['meta'].items():
                 if is_field_indexed(key):
                     field = SOLR_FIELD.format(id=resource['id'], key=key)
                     pkg_dict[field] = value
@@ -164,4 +166,8 @@ class ExtractorPlugin(plugins.SingletonPlugin):
             'extractor_list': auth.extractor_list,
             'extractor_show': auth.extractor_show,
         }
+
+    # IClick
+    def get_commands(self):
+        return get_commands()
 

@@ -23,14 +23,14 @@ import logging
 
 import ckan.plugins.toolkit as toolkit
 from ckan.logic import validate
-from pylons import config
+from ckan.common import config
 from sqlalchemy.orm.exc import NoResultFound
 
-from . import schema
-from .helpers import check_access
-from ..model import ResourceMetadata, ResourceMetadatum
-from ..config import is_format_indexed
-from ..tasks import extract
+from ckanext.extractor.logic import schema
+from ckanext.extractor.logic.helpers import check_access
+from ckanext.extractor.model import ResourceMetadata, ResourceMetadatum
+from ckanext.extractor.config import is_format_indexed
+from ckanext.extractor.tasks import extract
 
 try:
     enqueue_job = toolkit.enqueue_job

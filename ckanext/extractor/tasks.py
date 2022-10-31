@@ -29,10 +29,10 @@ from requests.exceptions import RequestException
 from ckan.lib import search
 from ckan.plugins import PluginImplementations, toolkit
 
-from .config import is_field_indexed, load_config
-from .model import ResourceMetadata, ResourceMetadatum
-from .lib import download_and_extract
-from .interfaces import IExtractorPostprocessor
+from ckanext.extractor.config import is_field_indexed,load_config, _register_translator
+from ckanext.extractor.model import ResourceMetadata, ResourceMetadatum
+from ckanext.extractor.lib import download_and_extract
+from ckanext.extractor.interfaces import IExtractorPostprocessor
 
 
 log = logging.getLogger(__name__)
@@ -55,6 +55,7 @@ def extract(ini_path, res_dict):
     Any previously stored metadata for the resource is cleared.
     """
     load_config(ini_path)
+    #_register_translator()
 
     # Get package data before doing any hard work so that we can fail
     # early if the package is private.
@@ -79,7 +80,7 @@ def extract(ini_path, res_dict):
         extracted = download_and_extract(res_dict['url'])
         for plugin in PluginImplementations(IExtractorPostprocessor):
             plugin.extractor_after_extract(res_dict, extracted)
-        for key, value in extracted.iteritems():
+        for key, value in extracted.items():
             if not is_field_indexed(key):
                 continue
 
