@@ -54,9 +54,13 @@ class _Schema(object):
         return {key: value for key, value in getmembers(cls) if not
                 key.startswith('__')}
 
+def is_string(value, context):
+    if not isinstance(value, str):
+        raise Invalid("Value must be a string")
+    return value
 
 class _MandatoryID(_Schema):
-    id = [not_empty, str]
+    id = [not_empty, is_string]
 
 extractor_delete = _MandatoryID
 

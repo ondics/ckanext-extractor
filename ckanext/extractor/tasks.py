@@ -78,6 +78,8 @@ def extract(ini_path, res_dict):
         metadata.last_extracted = datetime.datetime.now()
         metadata.meta.clear()
         extracted = download_and_extract(res_dict['url'])
+        log.debug("################################################# extracted: " + res_dict['url'])
+        log.debug(extracted)
         for plugin in PluginImplementations(IExtractorPostprocessor):
             plugin.extractor_after_extract(res_dict, extracted)
         for key, value in extracted.items():
