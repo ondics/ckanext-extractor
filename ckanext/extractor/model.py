@@ -37,7 +37,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import logging
 
-from sqlalchemy import Column, ForeignKey, Table, types
+from sqlalchemy import Column, ForeignKey, Table, types, inspect
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.collections import attribute_mapped_collection
@@ -142,13 +142,15 @@ def create_tables():
     """
     _ensure_setup()
 
-    if not resource_metadata_table.exists(bind=engine):
+    inspector = inspect(engine)
+
+    if not inspector.has_table(RESOURCE_METADATA_TABLE_NAME):
         log.info('Creating resource metadata table')
         resource_metadata_table.create(bind=engine)
     else:
         log.info('Resource metadata table already exists')
 
-    if not resource_metadatum_table.exists(bind=engine):
+    if not inspector.has_table(RESOURCE_METADATUM_TABLE_NAME):
         log.info('Creating resource metadatum table')
         resource_metadatum_table.create(bind=engine)
     else:
