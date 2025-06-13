@@ -81,12 +81,11 @@ class BaseObject(DomainObject):
 
 def setup():
     """
-    Set up ORM.
-
-    Does not create any database tables, see :py:func:`create_tables`
-    for that.
+    Set up ORM definitions (table objects and mappings).
+    Does not create any database tables.
     """
-    global resource_metadata_table
+    global resource_metadata_table, resource_metadatum_table
+
     if resource_metadata_table is None:
         log.debug('Defining resource metadata table')
         resource_metadata_table = Table(
@@ -111,7 +110,7 @@ def setup():
         )
     else:
         log.debug('Resource metadata table already defined')
-    global resource_metadatum_table
+
     if resource_metadatum_table is None:
         log.debug('Defining resource metadatum table')
         resource_metadatum_table = Table(
@@ -129,16 +128,26 @@ def setup():
         log.debug('Resource metadatum table already defined')
 
 
+def _ensure_setup():
+    """
+    Ensures setup() has been called, e.g. before accessing table objects directly.
+    """
+    if resource_metadata_table is None or resource_metadatum_table is None:
+        setup()
+
+
 def create_tables():
     """
-    Create database tables.
+    Create database tables, if not already existing.
     """
-    setup()
+    _ensure_setup()
+
     if not resource_metadata_table.exists(bind=engine):
         log.info('Creating resource metadata table')
         resource_metadata_table.create(bind=engine)
     else:
         log.info('Resource metadata table already exists')
+
     if not resource_metadatum_table.exists(bind=engine):
         log.info('Creating resource metadatum table')
         resource_metadatum_table.create(bind=engine)
