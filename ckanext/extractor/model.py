@@ -43,7 +43,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm.collections import attribute_mapped_collection
 
 from ckan.model.domain_object import DomainObject
-from ckan.model.meta import mapper, metadata, engine
+from ckan.model.meta import mapper, metadata
+import ckan.model.meta as meta
 
 
 log = logging.getLogger(__name__)
@@ -141,6 +142,11 @@ def create_tables():
     Create database tables, if not already existing.
     """
     _ensure_setup()
+
+    # Hole engine dynamisch zur Laufzeit:
+    engine = meta.engine
+    if engine is None:
+        raise RuntimeError("Engine not initialized yet")
 
     inspector = inspect(engine)
 
