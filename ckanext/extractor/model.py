@@ -43,7 +43,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm.collections import attribute_mapped_collection
 
 from ckan.model.domain_object import DomainObject
-from ckan.model.meta import mapper, metadata
+from ckan.model.meta import mapper, metadata, engine
 
 
 log = logging.getLogger(__name__)
@@ -134,14 +134,14 @@ def create_tables():
     Create database tables.
     """
     setup()
-    if not resource_metadata_table.exists():
+    if not resource_metadata_table.exists(bind=engine):
         log.info('Creating resource metadata table')
-        resource_metadata_table.create()
+        resource_metadata_table.create(bind=engine)
     else:
         log.info('Resource metadata table already exists')
-    if not resource_metadatum_table.exists():
+    if not resource_metadatum_table.exists(bind=engine):
         log.info('Creating resource metadatum table')
-        resource_metadatum_table.create()
+        resource_metadatum_table.create(bind=engine)
     else:
         log.info('Resource metadatum table already exists')
 

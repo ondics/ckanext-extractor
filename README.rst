@@ -19,7 +19,7 @@ your data.
 Requirements
 ============
 *ckanext-extractor* has been developed and tested with CKAN 2.6 and later.
-Other versions may or may not work.
+Updated and tested with CKAN 2.11.
 
 Since *ckanext-extractor* relies on the background job system introduced in
 CKAN 2.7, users of earlier CKAN versions need to also install ckanext-rq_.
