@@ -98,7 +98,7 @@ def extract(ini_path, res_dict):
             metadata.meta[key] = value
     except RequestException as e:
         log.warn('Failed to download resource data from "{}": {}'.format(
-                 res_dict['url'], e.message))
+                 res_dict['url'], str(e)))
     finally:
         metadata.task_id = None
         metadata.save()
